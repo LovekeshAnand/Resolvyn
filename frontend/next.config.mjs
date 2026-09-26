@@ -7,6 +7,8 @@ const BACKEND = process.env.BACKEND_URL ?? "http://127.0.0.1:8000";
 const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
+    // Hosted on Vercel there is no backend next door: the browser calls the backend's own (ngrok) address directly, see lib/api.ts.
+    if (process.env.VERCEL && !process.env.BACKEND_URL) return [];
     return [
       { source: "/api/:path*", destination: `${BACKEND}/api/:path*` },
       { source: "/ws/:path*", destination: `${BACKEND}/ws/:path*` },

@@ -9,13 +9,12 @@ import { LogoMark } from "@/components/brand/Logo";
 import { Hero } from "@/components/landing/Hero";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
 
 /** The pitch and the proof: the hero, how it works, and a few measured numbers. The conversation itself lives at /talk. */
 export default function HomePage() {
   const [results, setResults] = useState<Results | null>(null);
   useEffect(() => {
-    api.get<Results>("/benchmarks").then(setResults).catch(() => undefined);
+    fetch("/benchmarks.json").then((r) => (r.ok ? r.json() : null)).then(setResults).catch(() => undefined); // shipped with the site: needs no backend
   }, []);
 
   return (

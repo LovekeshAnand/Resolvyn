@@ -19,7 +19,7 @@
 ![shadcn/ui](https://img.shields.io/badge/UI-shadcn%2Fui-18181b?style=flat-square)
 ![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph-1c3c3c?style=flat-square)
 ![Local LLM](https://img.shields.io/badge/LLM-Qwen%20on%20a%204%20GB%20GPU-6f42c1?style=flat-square)
-![Tests](https://img.shields.io/badge/tests-104%20backend%20%2B%2037%20orchestration-22c55e?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-147%20backend%20%2B%2037%20orchestration-22c55e?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-Active%20Development-orange?style=flat-square)
 
 </div>
@@ -86,7 +86,7 @@ Every risky or uncertain step durably pauses the graph through LangGraph's own c
 
 ### Sounds Like a Person
 
-An acknowledgement plays roughly 10 ms after the caller stops talking, before any model has started — no dead air. Replies stream sentence by sentence and can be interrupted mid-sentence. Riya detects when the caller is talking to someone else in the room and stays quiet, and understands Hinglish, Hindi, and English in the same call, in the voice of your choice (Gnani Indian voices).
+An acknowledgement plays about 4 ms after the caller stops talking, before any model has started — no dead air. Replies stream sentence by sentence and can be interrupted mid-sentence. Riya detects when the caller is talking to someone else in the room and stays quiet, and understands Hinglish, Hindi, and English in the same call, in the voice of your choice (Gnani Indian voices).
 
 ### Live AI Brain — Transparent and Watchable
 
@@ -169,16 +169,26 @@ Every step in the middle of this pipeline can pause and durably wait for a human
 
 ---
 
-## Performance (RTX A2000 4 GB, i7-11850H, 16 GB RAM)
+## Performance and Benchmarks (RTX A2000 4 GB, i7-11850H, 16 GB RAM)
 
-| Measure | Result |
+Measured on real conversations against the running system with the local Qwen3.5-4B model, on the seeded dataset of 50 resolved tickets. Nothing here used a cloud model.
+
+| What | Result |
 |---|---|
-| Acknowledgement after caller stops | ~10 ms (rules + cached phrase, no model) |
-| Jev judgment | ~13 ms per sentence |
-| Swarm routing decision | sub-millisecond — five departments scored from in-memory tables and two small DB reads, no model call |
-| Local reply, first spoken sentence | 1.2 to 2.5 s (Qwen3.5-4B at 35 to 39 tok/s) |
-| Hero flow resolved end-to-end | ~40 s including human approval |
-| Automated test suite | 104 backend + 37 orchestration, all passing without a GPU |
+| Everyday support cases solved start to finish (refund with approval, unlock, cancel, delay, escalation, side talk, tool outage, Hindi) | **12 of 12**; the refund never ran before the manager approved it |
+| Truth gate: 55 adversarial conversations that tempt the model to invent dates, prices, warranties and fix times | **55 of 55** replies stayed truthful with the gate on; the model alone slipped 2 of 55, and the gate stopped 7 unverifiable sentences |
+| A first-time problem becomes the answer for the next caller | **3 of 3** flagged, relayed on the live call (about 2.2 s after the manager sends), then answered from memory with no human |
+| Routing on sentences it was never tuned on | 75% by rules alone in 0.4 ms; **95.8%** when the 4B model is asked on the unsure 67% |
+| "I want a person" on unseen sentences | precision 100%, recall 93% |
+| Finding the right document section | 88% first, 96% in the top three (25 questions, 84 chunks indexed) |
+| Numbers and IDs in the summary email that trace back to verified records | 6 of 6 |
+| Acknowledgement after the caller stops | about 4 ms (rules and a cached phrase, no model) |
+| Jev judgment of a sentence | about 13 ms end to end, 0.4 ms for the rules alone |
+| First real word of the reply / whole turn (median) | 1.5 s / 2.6 s (39.7 tokens/s) |
+| GPU memory with the model loaded | 3.2 of 4 GB; no cloud calls, no per-minute fees |
+| Automated test suite | 147 backend + 37 orchestration, all passing without a GPU |
+
+The same numbers, in plain language, are on the home page (`/`, "By the numbers"); the per-scenario tables, method and limits are in [`docs/benchmarks.md`](docs/benchmarks.md). Small samples on simulated Nova Retail data: read them as measurements of this build, not industry statistics. The 4B model is already largely truthful when its prompt carries the rules, so the truth gate is a safety net rather than a dramatic reduction, and it trades a little helpfulness for that. Regenerate with `cd backend ; .venv\Scripts\python -m benchmarks.run`, then `-m benchmarks.report`.
 
 ---
 
@@ -222,9 +232,13 @@ cd .. ; .\start.ps1                          # first run creates the venv and bu
 
 | | URL |
 |---|---|
-| Customer side | http://localhost:3000 |
+| Home, pitch and benchmarks | http://localhost:3000 |
+| How Resolvyn works (visual explainer) | http://localhost:3000/docs |
+| Talk, chat or email Riya | http://localhost:3000/talk |
 | Team console | http://localhost:3000/ops |
 | API docs | http://localhost:8000/docs |
+
+**Hosted UI:** the website can live on Vercel while the backend stays on your laptop behind ngrok: `.\start-public.ps1` starts the backend and its tunnel, and [`docs/deploy.md`](docs/deploy.md) has the one-time setup.
 
 `.\start.ps1 -Tunnel` prints a public HTTPS address so a phone or a judge's laptop can open the customer side.
 `.\stop.ps1` stops everything and frees the GPU.
@@ -286,7 +300,7 @@ docs/        Demo runbook, test data, architecture notes, swarm router design
 ```
 
 ```powershell
-cd backend ; .venv\Scripts\python -m pytest -q                                    # 104 tests, no GPU or API keys needed
+cd backend ; .venv\Scripts\python -m pytest -q                                    # 147 tests, no GPU or API keys needed
 cd .. ; backend\.venv\Scripts\python -m pytest agents\tests -q                    # 37 orchestration tests
 ```
 

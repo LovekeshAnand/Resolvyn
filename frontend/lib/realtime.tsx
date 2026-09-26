@@ -3,6 +3,8 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { WS_BASE_URL } from "@/lib/api";
+
 /**
  * Realtime layer — docs/architecture.md §3 (WebSocket preferred, short
  * polling fallback). One shared connection per tab: on any broadcast from
@@ -11,7 +13,7 @@ import { useRouter } from "next/navigation";
  * manual reload, and a rolling notification list is kept for the bell.
  */
 
-const WS_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api").replace(/^http/, "ws").replace(/\/api$/, "/ws");
+const WS_URL = `${WS_BASE_URL}/ws`;
 
 export interface RealtimeEvent {
   type: string;

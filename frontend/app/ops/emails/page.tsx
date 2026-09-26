@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/primitives";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Input } from "@/components/ui/input";
-import { api } from "@/lib/api";
+import { API_BASE_URL, api } from "@/lib/api";
 import { fmtClock } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -117,7 +117,7 @@ export default function EmailsPage() {
                   <p className="text-xs text-muted-foreground">
                     To {mail.to}
                     {mail.intended_for ? ` (customer: ${mail.intended_for})` : ""} · {mail.ticket_id} · {mail.delivered} ·{" "}
-                    <a href={`/api/email/eml/${Math.min(selected, mails.length - 1)}`} className="underline underline-offset-2 hover:text-foreground">
+                    <a href={`${API_BASE_URL}/email/eml/${Math.min(selected, mails.length - 1)}`} className="underline underline-offset-2 hover:text-foreground">
                       Download .eml
                     </a>
                   </p>

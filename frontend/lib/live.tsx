@@ -18,7 +18,7 @@ import type {
   Stats,
   Ticket,
 } from "@/features/types";
-import { API_BASE_URL, WS_BASE_URL, api } from "@/lib/api";
+import { API_BASE_URL, NGROK_SKIP, WS_BASE_URL, api } from "@/lib/api";
 
 export type LiveEvent = { type: string; [key: string]: any };
 
@@ -199,7 +199,7 @@ export function LiveProvider({ children }: { children: ReactNode }) {
   // A reset wipes tickets server-side; make sure the snapshot is authoritative again.
   useEffect(() => {
     if (!demo || demo.state !== "finished") return;
-    fetch(`${API_BASE_URL}/tickets`).catch(() => undefined);
+    fetch(`${API_BASE_URL}/tickets`, { headers: NGROK_SKIP }).catch(() => undefined);
   }, [demo]);
 
   const value = useMemo<LiveState>(

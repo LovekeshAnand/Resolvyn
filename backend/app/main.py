@@ -61,7 +61,8 @@ app = FastAPI(title=settings.app_name, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
+    # localhost, plus the hosted UI (Vercel) that calls this backend through an ngrok address
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?|https://[a-z0-9-]+\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

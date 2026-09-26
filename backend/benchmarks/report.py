@@ -191,6 +191,12 @@ add("- Small samples, one scripted caller per scenario. Percentages will move by
 add("- The adversarial ground-truth patterns catch the obvious ways to break the rules; a creative enough hallucination could slip past both the pattern and the guard.")
 add("- Retrieval and routing sets are small and hand-written for this business's documents.")
 
+# the same merged numbers, as a static file the website ships with, so the public pages need no running backend
+site = ROOT.parent / "frontend" / "public" / "benchmarks.json"
+if site.parent.exists():
+    site.write_text(json.dumps({**R, "tests": TESTS}, ensure_ascii=False), encoding="utf-8")
+    print("wrote", site)
+
 out = ROOT.parent / "docs" / "benchmarks.md"
 out.write_text("\n".join(L) + "\n", encoding="utf-8")
 print("wrote", out, len(L), "lines")

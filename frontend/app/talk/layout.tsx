@@ -1,13 +1,12 @@
 import type { ReactNode } from "react";
 
 import { BackendBanner } from "@/components/layout/BackendBanner";
-import { LiveProvider } from "@/lib/live";
 
-export default function OpsLayout({ children }: { children: ReactNode }) {
+export default function TalkLayout({ children }: { children: ReactNode }) {
   return (
-    <LiveProvider>
+    <>
       {children}
       <BackendBanner />
-    </LiveProvider>
+    </>
   );
 }

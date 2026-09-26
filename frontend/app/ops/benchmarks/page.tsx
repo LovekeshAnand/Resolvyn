@@ -5,13 +5,12 @@ import { useEffect, useState } from "react";
 import { BenchmarkView, type Results } from "@/components/benchmarks/BenchmarkView";
 import { AppShell } from "@/components/layout/AppShell";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { api } from "@/lib/api";
 
 export default function BenchmarksPage() {
   const [results, setResults] = useState<Results | null | "none">(null);
 
   useEffect(() => {
-    api.get<Results>("/benchmarks").then(setResults).catch(() => setResults("none"));
+    fetch("/benchmarks.json").then((r) => (r.ok ? r.json() : Promise.reject())).then(setResults).catch(() => setResults("none"));
   }, []);
 
   return (

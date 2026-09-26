@@ -20,7 +20,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { CustomerTicketView } from "@/features/types";
-import { WS_BASE_URL, api, ttsUrl } from "@/lib/api";
+import { NGROK_SKIP, WS_BASE_URL, api, ttsUrl } from "@/lib/api";
 
 export type CallStatus = "idle" | "connecting" | "live" | "ended";
 export type AgentStatus = "listening" | "thinking" | "speaking";
@@ -168,7 +168,7 @@ export function useCall() {
 
   const enqueueAudio = useCallback(
     (text: string, l: string) => {
-      const audio = fetch(ttsUrl(text, l))
+      const audio = fetch(ttsUrl(text, l), { headers: NGROK_SKIP })
         .then((r) => (r.ok ? r.blob() : null))
         .catch(() => null);
       queue.current.push({ gen: gen.current, text, audio });
