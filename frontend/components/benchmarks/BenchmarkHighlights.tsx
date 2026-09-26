@@ -14,12 +14,13 @@ export function BenchmarkHighlights({ r }: { r: Results }) {
   const probes = gated.reduce((n: number, x: any) => n + x.probes, 0);
   const bad = gated.reduce((n: number, x: any) => n + x.violations, 0);
   const jm = r.jev_model, ho = r.offline?.jev?.heldout, res = r.resolution, lrn = r.learning, em = r.email;
-  const firstWord = r.server_side?.first_word_ms?.p50;
+  const firstSound = r.latency?.first_sound_ms?.p50; // what the caller hears first: the spoken acknowledgement
+  const firstWord = r.latency?.first_word_ms?.p50;
 
   const tiles: { value: string; label: string; sub: string }[] = [
     probes ? { value: pct(1 - bad / probes), label: "of replies stayed truthful", sub: `Even when ${probes} conversations were built to make it invent a date, a price or a promise.` } : null,
     res ? { value: `${res.passed} of ${res.n}`, label: "everyday support cases solved start to finish", sub: "Refunds, unlocks, cancellations, delays, angry callers, Hindi. Money only moves after a manager approves." } : null,
-    firstWord ? { value: `${(firstWord / 1000).toFixed(1)} s`, label: "until Riya starts answering", sub: "A natural pace for a phone call, running on a laptop." } : null,
+    firstSound && firstWord ? { value: `${(firstSound / 1000).toFixed(2)} s`, label: "until Riya responds out loud", sub: `A spoken acknowledgement comes first; the full answer follows in about ${(firstWord / 1000).toFixed(1)} s, on a laptop.` } : null,
     lrn ? { value: `${Math.round(lrn.second_caller_from_memory * lrn.n)} of ${lrn.n}`, label: "new problems learned from a single tip", sub: "A manager types one fix. The live caller hears it, and the next customer gets it automatically." } : null,
     jm ? { value: pct(jm.with_model_help), label: "sent to the right team first time", sub: "Measured on sentences it had never seen before." } : null,
     ho?.human_request ? { value: pct(ho.human_request.recall), label: "of “let me talk to a person” requests recognised", sub: "With no false alarms, so people are only pulled in when they are needed." } : null,

@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Button } from "@/components/ui/button";
 
 const STATS = [
-  { value: "< 2 s", label: "until Riya starts answering" },
+  { value: "0.2 s", label: "until Riya responds out loud" },
   { value: "12 of 12", label: "everyday support cases solved" },
   { value: "3", label: "channels: voice, chat, email" },
 ];

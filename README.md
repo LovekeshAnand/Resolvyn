@@ -86,7 +86,7 @@ Every risky or uncertain step durably pauses the graph through LangGraph's own c
 
 ### Sounds Like a Person
 
-An acknowledgement plays about 4 ms after the caller stops talking, before any model has started — no dead air. Replies stream sentence by sentence and can be interrupted mid-sentence. Riya detects when the caller is talking to someone else in the room and stays quiet, and understands Hinglish, Hindi, and English in the same call, in the voice of your choice (Gnani Indian voices).
+An acknowledgement is queued within about 4 ms of the caller stopping and is heard in about 0.2 s, before any model has started — no dead air. Replies stream sentence by sentence and can be interrupted mid-sentence. Riya detects when the caller is talking to someone else in the room and stays quiet, and understands Hinglish, Hindi, and English in the same call, in the voice of your choice (Gnani Indian voices).
 
 ### Live AI Brain — Transparent and Watchable
 
@@ -182,7 +182,7 @@ Measured on real conversations against the running system with the local Qwen3.5
 | "I want a person" on unseen sentences | precision 100%, recall 93% |
 | Finding the right document section | 88% first, 96% in the top three (25 questions, 84 chunks indexed) |
 | Numbers and IDs in the summary email that trace back to verified records | 6 of 6 |
-| Acknowledgement after the caller stops | about 4 ms (rules and a cached phrase, no model) |
+| Spoken acknowledgement after the caller stops | queued in about 4 ms on the server (rules and a cached phrase, no model); the caller hears the first sound in about 0.2 s |
 | Jev judgment of a sentence | about 13 ms end to end, 0.4 ms for the rules alone |
 | First real word of the reply / whole turn (median) | 1.5 s / 2.6 s (39.7 tokens/s) |
 | GPU memory with the model loaded | 3.2 of 4 GB; no cloud calls, no per-minute fees |
